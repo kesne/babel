@@ -1,4 +1,4 @@
-# babel-plugin-transform-q-operator
+# babel-plugin-transform-qq-operator
 
 Compile qq operator to ES5
 
