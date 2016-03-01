@@ -294,6 +294,20 @@ export default class Tokenizer {
     }
   }
 
+  readToken_question(code) {
+    let type = tt.question;
+    let width = 1;
+    let next = this.input.charCodeAt(this.state.pos + 1);
+
+    if (next === 63 && this.hasPlugin("qqOperator")) { // '?'
+      width++;
+      next = this.input.charCodeAt(this.state.pos + 2);
+      type = tt.qq;
+    }
+
+    return this.finishOp(type, width);
+  }
+
   readToken_mult_modulo(code) { // '%*'
     let type = code === 42 ? tt.star : tt.modulo;
     let width = 1;
@@ -410,7 +424,9 @@ export default class Tokenizer {
           return this.finishToken(tt.colon);
         }
 
-      case 63: ++this.state.pos; return this.finishToken(tt.question);
+      case 63:
+        return this.readToken_question(code);
+
       case 64: ++this.state.pos; return this.finishToken(tt.at);
 
       case 96: // '`'
