@@ -95,7 +95,7 @@ export const types = {
   star: binop("*", 10),
   slash: binop("/", 10),
   exponent: new TokenType("**", {beforeExpr: true, binop: 11, rightAssociative: true}),
-  qq: new TokenType("??", {beforeExpr: true, binop: 11, rightAssociative: true})
+  qq: new TokenType("??", {beforeExpr: true, binop: 11, rightAssociative: false})
 };
 
 // Map keyword names to token types.

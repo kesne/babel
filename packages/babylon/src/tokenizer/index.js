@@ -303,6 +303,11 @@ export default class Tokenizer {
       width++;
       next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.qq;
+
+      if (next === 61) {
+        width++;
+        type = tt.assign;
+      }
     }
 
     return this.finishOp(type, width);
