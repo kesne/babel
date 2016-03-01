@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-qq-operator",
   "version": "6.5.0",
   "description": "Compile qq operator to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-qq-operator",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

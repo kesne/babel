@@ -8,14 +8,11 @@ export default function ({ types: t }) {
       operator: "??",
 
       build(left, right) {
-        return (
-          t.conditionalExpression(
-            t.binaryExpression("===", left, t.identifier("undefined")),
-            left,
-            right
-          )
-        )
-        // return t.callExpression(t.memberExpression(t.identifier("Math"), t.identifier("pow")), [left, right]);
+        return t.conditionalExpression(
+          t.binaryExpression("===", left, t.identifier("undefined")),
+          left,
+          right
+        );
       }
     })
   };
