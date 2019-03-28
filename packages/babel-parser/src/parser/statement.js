@@ -1127,17 +1127,15 @@ export default class StatementParser extends ExpressionParser {
 
   parseDecoratorDeclaration(node) {
     this.next();
-    this.parseDecoratorId(node);
+    node.id = this.parseDecoratorIdentifier();
     this.parseDecoratorDefinitions(node);
 
     return this.finishNode(node, "DecoratorDeclaration");
   }
 
-  parseDecoratorId(node): void {
-    this.expect(tt.at);
-    // TODO: Probably shouldn't use a normal identifier here.
-    // Can unify the usage / definition into a DecoratorIdentifier that includes the `@`.
-    node.id = this.parseIdentifier();
+  parseDecoratorId(node) {
+    node.id = this.parseDecoratorIdentifier();
+    this.checkLVal(node.id, BIND_LEXICAL, undefined, "decorator name");
   }
 
   parseDecoratorDefinitions(node) {
@@ -2145,7 +2143,12 @@ export default class StatementParser extends ExpressionParser {
 
   parseImportSpecifier(node: N.ImportDeclaration): void {
     const specifier = this.startNode();
-    specifier.imported = this.parseIdentifier(true);
+    if (this.match(tt.at)) {
+      specifier.imported = this.parseDecoratorIdentifier();
+    } else {
+      specifier.imported = this.parseIdentifier(true);
+    }
+
     if (this.eatContextual("as")) {
       specifier.local = this.parseIdentifier();
     } else {

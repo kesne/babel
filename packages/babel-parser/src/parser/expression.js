@@ -1995,6 +1995,15 @@ export default class ExpressionParser extends LValParser {
     return elt;
   }
 
+  parseDecoratorIdentifier() {
+    const node = this.startNode();
+    this.expect(tt.at);
+
+    node.name = `@${this.parseIdentifierName(node.start, true)}`;
+
+    return this.finishNode(node, "DecoratorIdentifier");
+  }
+
   // Parse the next token as an identifier. If `liberal` is true (used
   // when parsing properties), it will also convert keywords into
   // identifiers.

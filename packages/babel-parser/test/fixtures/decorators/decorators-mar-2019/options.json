@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["decorators", { "version": "mar-2019", "decoratorsBeforeExport": false }]
+  ],
+  "sourceType": "module"
+}

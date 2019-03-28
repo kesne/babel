@@ -16,7 +16,12 @@ import type {
 import type { Pos, Position } from "../util/location";
 import { isStrictBindReservedWord } from "../util/identifier";
 import { NodeUtils } from "./node";
-import { type BindingTypes, BIND_NONE, BIND_OUTSIDE } from "../util/scopeflags";
+import {
+  type BindingTypes,
+  BIND_NONE,
+  BIND_OUTSIDE,
+  BIND_LEXICAL,
+} from "../util/scopeflags";
 
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
@@ -330,6 +335,9 @@ export default class LValParser extends NodeUtils {
     contextDescription: string,
   ): void {
     switch (expr.type) {
+      case "DecoratorIdentifier":
+        this.scope.declareName(expr.name, BIND_LEXICAL, expr.start);
+        break;
       case "Identifier":
         if (
           this.state.strict &&
