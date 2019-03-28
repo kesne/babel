@@ -2,7 +2,7 @@
 set -e
 
 node="node"
-jestArgs=()
+jestArgs=("--watch")
 
 if [ "$TEST_DEBUG" ]; then
   node="node --inspect-brk"

@@ -45,6 +45,8 @@ export function runFixtureTests(fixturesPath, parseFunction) {
   const fixtures = getFixtures(fixturesPath);
 
   Object.keys(fixtures).forEach(function(name) {
+    if (name !== "decorators") return;
+
     fixtures[name].forEach(function(testSuite) {
       testSuite.tests.forEach(function(task) {
         const testFn = task.disabled ? it.skip : it;

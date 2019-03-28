@@ -57,6 +57,7 @@ export default class ExpressionParser extends LValParser {
     isStatement: boolean,
     optionalId?: boolean,
   ) => N.Class;
+  +parseDecoratorDeclaration: (node: any) => any;
   +parseDecorators: (allowExport?: boolean) => void;
   +parseFunction: <T: N.NormalFunction>(
     node: T,
@@ -1000,6 +1001,10 @@ export default class ExpressionParser extends LValParser {
         node = this.startNode();
         this.takeDecorators(node);
         return this.parseClass(node, false);
+
+      case tt._decorator:
+        node = this.startNode();
+        return this.parseDecoratorDeclaration(node);
 
       case tt._new:
         return this.parseNew();

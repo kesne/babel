@@ -1125,6 +1125,40 @@ export default class StatementParser extends ExpressionParser {
     this.checkYieldAwaitInDefaultParams();
   }
 
+  parseDecoratorDeclaration(node) {
+    this.next();
+    this.parseDecoratorId(node);
+    this.parseDecoratorDefinitions(node);
+
+    return this.finishNode(node, "DecoratorDeclaration");
+  }
+
+  parseDecoratorId(node): void {
+    this.expect(tt.at);
+    // TODO: Probably shouldn't use a normal identifier here.
+    // Can unify the usage / definition into a DecoratorIdentifier that includes the `@`.
+    node.id = this.parseIdentifier();
+  }
+
+  parseDecoratorDefinitions(node) {
+    this.expect(tt.braceL);
+
+    const decorators = [];
+
+    while (!this.eat(tt.braceR)) {
+      decorators.push(this.parseDecorator());
+    }
+
+    if (!decorators.length) {
+      this.raise(
+        this.state.start,
+        "Decorator definitions must include at least one decorator",
+      );
+    }
+
+    node.decorators = decorators;
+  }
+
   // Parse a class declaration or literal (depending on the
   // `isStatement` parameter).
 

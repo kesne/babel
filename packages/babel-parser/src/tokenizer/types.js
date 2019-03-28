@@ -182,6 +182,7 @@ export const types: { [name: string]: TokenType } = {
   _this: createKeyword("this", { startsExpr }),
   _super: createKeyword("super", { startsExpr }),
   _class: createKeyword("class", { startsExpr }),
+  _decorator: createKeyword("decorator", { startsExpr }),
   _extends: createKeyword("extends", { beforeExpr }),
   _export: createKeyword("export"),
   _import: createKeyword("import", { startsExpr }),
