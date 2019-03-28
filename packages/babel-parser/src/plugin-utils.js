@@ -39,6 +39,7 @@ export function getPluginOption(
 }
 
 const PIPELINE_PROPOSALS = ["minimal", "smart"];
+const DECORATORS_VERSIONS = ["nov-2018", "mar-2019"];
 
 export function validatePlugins(plugins: PluginList) {
   if (hasPlugin(plugins, "decorators")) {
@@ -48,20 +49,41 @@ export function validatePlugins(plugins: PluginList) {
       );
     }
 
+    const decoratorsVersion = getPluginOption(plugins, "decorators", "version");
     const decoratorsBeforeExport = getPluginOption(
       plugins,
       "decorators",
       "decoratorsBeforeExport",
     );
-    if (decoratorsBeforeExport == null) {
+
+    if (decoratorsVersion == null || decoratorsVersion == "nov-2018") {
+      if (decoratorsBeforeExport == null) {
+        throw new Error(
+          "The 'decorators' plugin requires a 'decoratorsBeforeExport' option," +
+            " whose value must be a boolean. If you are migrating from" +
+            " Babylon/Babel 6 or want to use the old decorators proposal, you" +
+            " should use the 'decorators-legacy' plugin instead of 'decorators'.",
+        );
+      } else if (typeof decoratorsBeforeExport !== "boolean") {
+        throw new Error("'decoratorsBeforeExport' must be a boolean.");
+      }
+    }
+
+    if (decoratorsVersion != null && decoratorsBeforeExport == "mar-2019") {
       throw new Error(
-        "The 'decorators' plugin requires a 'decoratorsBeforeExport' option," +
-          " whose value must be a boolean. If you are migrating from" +
-          " Babylon/Babel 6 or want to use the old decorators proposal, you" +
-          " should use the 'decorators-legacy' plugin instead of 'decorators'.",
+        "The 'decorators' plugin version 'mar-2019' is not compatible with the " +
+          "'decoratorsBeforeExport' option.",
       );
-    } else if (typeof decoratorsBeforeExport !== "boolean") {
-      throw new Error("'decoratorsBeforeExport' must be a boolean.");
+    }
+
+    if (
+      decoratorsVersion != null &&
+      !DECORATORS_VERSIONS.includes(decoratorsVersion)
+    ) {
+      throw new Error(
+        "The 'decorators' plugin 'version' option should be one of: " +
+          DECORATORS_VERSIONS.map(p => `'${p}'`).join(", "),
+      );
     }
   }
 

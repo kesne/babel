@@ -896,6 +896,15 @@ export default class ExpressionParser extends LValParser {
 
       case tt.name: {
         node = this.startNode();
+        if (
+          this.hasPlugin("decorators") &&
+          this.getPluginOption("decorators", "version") === "mar-2019" &&
+          this.state.value === "decorator" &&
+          this.lookahead().type == tt.at
+        ) {
+          return this.parseDecoratorDeclaration(node);
+        }
+
         const containsEsc = this.state.containsEsc;
         const id = this.parseIdentifier();
 
@@ -1001,10 +1010,6 @@ export default class ExpressionParser extends LValParser {
         node = this.startNode();
         this.takeDecorators(node);
         return this.parseClass(node, false);
-
-      case tt._decorator:
-        node = this.startNode();
-        return this.parseDecoratorDeclaration(node);
 
       case tt._new:
         return this.parseNew();

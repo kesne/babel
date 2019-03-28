@@ -1127,7 +1127,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseDecoratorDeclaration(node) {
     this.next();
-    node.id = this.parseDecoratorIdentifier();
+    this.parseDecoratorId(node);
     this.parseDecoratorDefinitions(node);
 
     return this.finishNode(node, "DecoratorDeclaration");
@@ -2143,7 +2143,11 @@ export default class StatementParser extends ExpressionParser {
 
   parseImportSpecifier(node: N.ImportDeclaration): void {
     const specifier = this.startNode();
-    if (this.match(tt.at)) {
+    if (
+      this.hasPlugin("decorators") &&
+      this.getPluginOption("decorators", "version") === "mar-2019" &&
+      this.match(tt.at)
+    ) {
       specifier.imported = this.parseDecoratorIdentifier();
     } else {
       specifier.imported = this.parseIdentifier(true);
